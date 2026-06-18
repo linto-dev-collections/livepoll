@@ -54,9 +54,21 @@ export class Poll extends Server<PollServerEnv> {
     conn.send(JSON.stringify(msg));
   }
 
-  /** 参加人数（participant タグの接続数）。 */
+  /**
+   * 参加人数（ユニークな voterKey の数）。
+   *
+   * 1 ブラウザ = 1 voterKey = 1 票という設計に揃え、接続（タブ）数ではなく
+   * 重複排除した voterKey 数で数える。同一ブラウザで複数タブを開いても 1 人として数え、
+   * 最後のタブを閉じたときに初めて減る（getConnections は現在開いている接続のみ返し、
+   * onClose のたびに再計算される）。observer（ホスト観戦）は participant タグが付かず対象外。
+   */
   private participantCount(): number {
-    return [...this.getConnections("participant")].length;
+    const voterKeys = new Set<string>();
+    for (const conn of this.getConnections("participant")) {
+      const key = this.voterKeyOf(conn);
+      if (key) voterKeys.add(key);
+    }
+    return voterKeys.size;
   }
 
   /** 接続の元 URI（ハイバネーション後も保持）から voterKey を取り出す。 */
