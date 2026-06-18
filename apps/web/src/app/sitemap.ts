@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE = "https://livepoll.app";
+const BASE = "https://livepoll.linto-dev.workers.dev";
 
 // 公開マーケティング系の静的ルートのみを列挙する。
 // /dashboard/* /invitation/* /goodbye は動的かつ noindex のため含めない。

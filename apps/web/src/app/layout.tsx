@@ -24,17 +24,17 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://livepoll.app"),
+  metadataBase: new URL("https://livepoll.linto-dev.workers.dev"),
   title: {
     default: "livepoll",
     template: "%s | livepoll",
   },
-  description: "チームでアカウントと組織を管理するためのプラットフォーム。",
+  description: "livepoll",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "ja_JP",
-    url: "https://livepoll.app",
+    url: "https://livepoll.linto-dev.workers.dev",
     siteName: "livepoll",
   },
   twitter: { card: "summary_large_image" },

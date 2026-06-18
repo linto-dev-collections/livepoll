@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE = "https://livepoll.app";
+const BASE = "https://livepoll.linto-dev.workers.dev";
 
 // クローラに対する明示的な指示。
 // - /share/ と /embed/ は disallow に含めない: Slack / X / Discord 等の link

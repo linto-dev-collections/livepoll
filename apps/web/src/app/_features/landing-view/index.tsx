@@ -10,14 +10,9 @@ export function LandingView() {
       <SiteHeader />
       <main className="flex flex-1 flex-col items-center justify-center gap-8 px-6 py-32 text-center">
         <LivepollIcon className="size-16 md:size-20" />
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="max-w-2xl font-bold text-4xl tracking-tight md:text-5xl">
-            livepoll
-          </h1>
-          <p className="max-w-md text-balance text-muted-foreground md:text-lg">
-            チームでアカウントと組織を管理するためのプラットフォーム。
-          </p>
-        </div>
+        <h1 className="max-w-2xl font-bold text-4xl tracking-tight md:text-5xl">
+          livepoll
+        </h1>
         <div className="flex flex-col items-center gap-3 sm:flex-row">
           <Link
             href="/sign-up"
