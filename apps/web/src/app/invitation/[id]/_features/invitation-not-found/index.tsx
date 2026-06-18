@@ -1,4 +1,4 @@
-import { buttonVariants } from "@livepoll/ui/components/ui/button";
+import { Button } from "@livepoll/ui/components/ui/button";
 import {
   Card,
   CardContent,
@@ -31,15 +31,14 @@ export function InvitationNotFound() {
           </p>
         </CardContent>
         <CardFooter>
-          <Link
-            href="/dashboard"
-            className={buttonVariants({
-              variant: "outline",
-              className: "w-full",
-            })}
+          <Button
+            variant="outline"
+            className="w-full"
+            nativeButton={false}
+            render={<Link href="/dashboard" />}
           >
             ダッシュボードへ戻る
-          </Link>
+          </Button>
         </CardFooter>
       </Card>
     </div>

@@ -1,5 +1,5 @@
 import { Alert, AlertDescription } from "@livepoll/ui/components/ui/alert";
-import { buttonVariants } from "@livepoll/ui/components/ui/button";
+import { Button } from "@livepoll/ui/components/ui/button";
 import {
   Card,
   CardContent,
@@ -44,12 +44,13 @@ export function InvitationEmailUnverified() {
           </Alert>
         </CardContent>
         <CardFooter>
-          <Link
-            href="/check-email"
-            className={buttonVariants({ className: "w-full" })}
+          <Button
+            className="w-full"
+            nativeButton={false}
+            render={<Link href="/check-email" />}
           >
             確認メールの再送について
-          </Link>
+          </Button>
         </CardFooter>
       </Card>
     </div>

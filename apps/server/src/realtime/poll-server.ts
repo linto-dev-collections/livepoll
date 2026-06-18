@@ -69,6 +69,20 @@ export class Poll extends Server<PollServerEnv> {
     }
   }
 
+  /**
+   * 同一 voterKey の全接続（＝同じブラウザの複数タブ）へ「投票済み」を配信する。
+   * 投票した接続だけに送ると、投票前から開いていた他タブはボタンが押せたままになり
+   * （youVoted が更新されない）、再度押すと ALREADY_VOTED エラーになる。全タブへ配信して
+   * 即座に投票済み状態（結果表示）へ揃える。投票した接続自身もこの集合に含まれる。
+   */
+  private sendVotedToVoter(voterKey: string, optionId: string): void {
+    for (const conn of this.getConnections("participant")) {
+      if (this.voterKeyOf(conn) === voterKey) {
+        this.send(conn, { type: "voted", optionId });
+      }
+    }
+  }
+
   /** 最新集計と参加人数を全員へ配信する。 */
   private async broadcastTally(): Promise<void> {
     const voteRepo = this.voteRepo();
@@ -230,7 +244,8 @@ export class Poll extends Server<PollServerEnv> {
         optionId: parsed.data.optionId,
         voterKey,
       });
-      this.send(conn, { type: "voted", optionId: parsed.data.optionId });
+      // 同一 voterKey の全タブを「投票済み」に揃える（投票した接続自身も含む）。
+      this.sendVotedToVoter(voterKey, parsed.data.optionId);
       await this.broadcastTally();
     } catch (error) {
       // use-case の DomainError を WS の error メッセージへ翻訳（内部情報は出さない）

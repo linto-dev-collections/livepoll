@@ -3,11 +3,25 @@ import { createId } from "@paralleldrive/cuid2";
 import { and, count, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 
-/** SQLite / D1 の UNIQUE 制約違反かどうかを判定する。 */
+/**
+ * SQLite / D1 の UNIQUE 制約違反かどうかを判定する。
+ *
+ * drizzle-orm は D1 のクエリエラーを `DrizzleQueryError`（message: "Failed query: ..."）で
+ * ラップし、実際の "UNIQUE constraint failed" は `error.cause` 側に入る。そのため top-level の
+ * message だけでなく cause 連鎖まで辿って判定する（辿らないと二重投票が ALREADY_VOTED に
+ * 変換されず汎用エラー扱いになる）。循環参照に備えて訪問済み集合でガードする。
+ */
 function isUniqueViolation(error: unknown): boolean {
-  return (
-    error instanceof Error && /UNIQUE constraint failed/i.test(error.message)
-  );
+  const seen = new Set<unknown>();
+  for (
+    let e: unknown = error;
+    e instanceof Error && !seen.has(e);
+    e = e.cause
+  ) {
+    seen.add(e);
+    if (/UNIQUE constraint failed/i.test(e.message)) return true;
+  }
+  return false;
 }
 
 export function createVoteRepository(d1: D1Database) {
